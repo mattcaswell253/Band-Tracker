@@ -125,38 +125,38 @@ namespace BandTracker
     }
     return foundBand;
   }
-
-  public List<Venue> GetVenues()
-{
-  SqlConnection conn = DB.Connection();
-  conn.Open();
-
-  SqlCommand cmd = new SqlCommand("SELECT venues.* FROM bands JOIN bands_venues ON (bands.id = venues_bands.band_id) JOIN categories ON (venues_bands.venue_id = venues.id) WHERE bands.id = @BandId;", conn);
-
-  cmd.Parameters.Add(new SqlParameter("@BandId", this.GetId().ToString()));
-
-  SqlDataReader rdr = cmd.ExecuteReader();
-
-  List<Venue> venues = new List<Venue>{};
-
-  while(rdr.Read())
-  {
-    int venueId = rdr.GetInt32(0);
-    string venueName = rdr.GetString(1);
-    Venue newVenue = new Venue(venueName, venueId);
-    venues.Add(newVenue);
-  }
-
-  if (rdr != null)
-  {
-    rdr.Close();
-  }
-  if (conn != null)
-  {
-    conn.Close();
-  }
-  return venues;
-}
+//
+//   public List<Venue> GetVenues()
+// {
+//   SqlConnection conn = DB.Connection();
+//   conn.Open();
+//
+//   SqlCommand cmd = new SqlCommand("SELECT venues.* FROM bands JOIN bands_venues ON (bands.id = venues_bands.band_id) JOIN categories ON (venues_bands.venue_id = venues.id) WHERE bands.id = @BandId;", conn);
+//
+//   cmd.Parameters.Add(new SqlParameter("@BandId", this.GetId().ToString()));
+//
+//   SqlDataReader rdr = cmd.ExecuteReader();
+//
+//   List<Venue> venues = new List<Venue>{};
+//
+//   while(rdr.Read())
+//   {
+//     int venueId = rdr.GetInt32(0);
+//     string venueName = rdr.GetString(1);
+//     Venue newVenue = new Venue(venueName, venueId);
+//     venues.Add(newVenue);
+//   }
+//
+//   if (rdr != null)
+//   {
+//     rdr.Close();
+//   }
+//   if (conn != null)
+//   {
+//     conn.Close();
+//   }
+//   return venues;
+// }
 
 public void Delete()
   {
