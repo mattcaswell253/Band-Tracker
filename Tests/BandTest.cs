@@ -50,6 +50,42 @@ namespace BandTracker
           Assert.Equal(testList, result);
         }
 
+
+        [Fact]
+        public void Test_Save_AssignsIdToObject()
+        {
+            //Arrange
+            Band testBand = new Band("Nirvana");
+
+            //Act
+            testBand.Save();
+            Band savedBand = Band.GetAll()[0];
+
+
+            int result = savedBand.GetId();
+            int testId = testBand.GetId();
+
+            //Assert
+            Assert.Equal(testId, result);
+        }
+
+        [Fact]
+        public void Test_Find_FindBandInDatabase()
+        {
+            //Arrange
+            Band testBand = new Band("Nirvana");
+            testBand.Save();
+
+            //Act
+            Band foundBand = Band.Find(testBand.GetId());
+
+            //Assert
+            Assert.Equal(testBand, foundBand);
+        }
+
+
+
+
         public void Dispose()
       {
 
