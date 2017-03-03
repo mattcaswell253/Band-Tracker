@@ -84,11 +84,30 @@ namespace BandTracker
         }
 
 
+        [Fact]
+        public void Test_AddVenue_AddsVenueToBand()
+        {
+          //Arrange
+          Band testBand = new Band("Nirvana");
+          testBand.Save();
+
+          Venue testVenue = new Venue("White River Ampitheater");
+          testVenue.Save();
+
+          //Act
+          testBand.AddVenue(testVenue);
+
+          List<Venue> result = testBand.GetVenues();
+          List<Venue> testList = new List<Venue>{testVenue};
+
+          //Assert
+          Assert.Equal(testList, result);
+        }
 
 
         public void Dispose()
       {
-
+          
           Band.DeleteAll();
       }
 
