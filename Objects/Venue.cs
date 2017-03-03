@@ -127,5 +127,83 @@ namespace BandTracker
           return foundVenue;
       }
 
+      public void AddBand(Band newBand)
+      {
+          SqlConnection conn = DB.Connection();
+          conn.Open();
+
+          SqlCommand cmd = new SqlCommand("INSERT INTO bands_venues (venue_id, band_id) VALUES (@VenueId, @BandId);", conn);
+          cmd.Parameters.Add(new SqlParameter("@VenueId", this.GetId()));
+          cmd.Parameters.Add(new SqlParameter("@BandId", newBand.GetId()));
+
+          cmd.ExecuteNonQuery();
+
+          if (conn != null)
+          {
+              conn.Close();
+          }
+      }
+
+      public List<Band> GetBands()
+      {
+          SqlConnection conn = DB.Connection();
+          conn.Open();
+
+          SqlCommand cmd = new SqlCommand("SELECT bands.* FROM venues JOIN bands_venues ON (venues.id = bands_venues.venue_id) JOIN bands ON (bands_venues.band_id = bands.id) WHERE venues.id = @VenueId;", conn);
+
+          cmd.Parameters.Add(new SqlParameter("@VenueId", this.GetId().ToString()));
+
+          SqlDataReader rdr = cmd.ExecuteReader();
+
+          List<Band> allBands = new List<Band>{};
+
+          while(rdr.Read())
+          {
+              int BandId = rdr.GetInt32(0);
+              string BandName = rdr.GetString(1);
+              Band newBand = new Band(BandName, BandId);
+              allBands.Add(newBand);
+          }
+
+          if (rdr != null)
+          {
+              rdr.Close();
+          }
+          if (conn != null)
+          {
+              conn.Close();
+          }
+          return allBands;
+      }
+
+
+        public void Delete()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("DELETE FROM venues WHERE id = @VenueId; DELETE FROM bands_venues WHERE venue_id = @VenueId;", conn);
+
+      cmd.Parameters.Add(new SqlParameter("@VenueId", this.GetId()));
+
+      cmd.ExecuteNonQuery();
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+
+        public static void DeleteAll()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+            SqlCommand cmd = new SqlCommand("DELETE FROM venues;", conn);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
+
+
+
     }
 }
