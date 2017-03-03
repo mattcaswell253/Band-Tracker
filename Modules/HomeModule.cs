@@ -46,12 +46,27 @@ namespace BandTracker
               return View["bands_venues.cshtml", model];
           };
 
+
+          Post["/band/{id}/venue"] = parameters => {
+            Venue newVenue = new Venue(Request.Form["venue-name"]);
+            newVenue.Save();
+            Band SelectedBand = Band.Find(parameters.id);
+            SelectedBand.AddVenue(newVenue);
+            Dictionary<string, object> model = new Dictionary<string, object>();
+            List<Venue> VenueList = SelectedBand.GetVenues();
+            model.Add("band", SelectedBand);
+            model.Add("venue", VenueList);
+
+            return View["venues_of_bands.cshtml", model];
+          };
+
           Get["/band/{id}"] = parameters => {
-              Dictionary<string, object> model = new Dictionary<string, object>();
-              Band SelectedBand = Band.Find(parameters.id);
-              List<Venue> BandVenue = SelectedBand.GetVenues();
-              model.Add("band", SelectedBand);
-              return View["index.cshtml"];
+            Dictionary<string, object> model = new Dictionary<string, object>();
+            Band SelectedBand = Band.Find(parameters.id);
+            List<Venue> VenueList = SelectedBand.GetVenues();
+            model.Add("band", SelectedBand);
+            model.Add("venue", VenueList);
+            return View["venues_of_bands.cshtml", model];
           };
 
           Delete["/venue/delete/{id}"] = parameters => {

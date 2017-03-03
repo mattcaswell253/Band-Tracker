@@ -1,0 +1,14 @@
+@{
+  Layout = "Shared/_Layout.cshtml";
+}
+<h3>@Model["band"].GetName() venue List</h3
+
+@foreach(var venue in Model["venue"])
+{
+  <li>
+    <h5>Venue Preformed at: <a href="/venue/@venue.GetId()"> @venue.GetName()</a></h5>
+
+  </li>
+}
+
+<a href="/" class="waves-effect waves-light btn">Home</a>
