@@ -66,6 +66,65 @@ namespace BandTracker
           Assert.Equal(testId, result);
       }
 
+      [Fact]
+      public void Test_Find_FindsVenueInDatabase()
+      {
+          //Arrange
+          Venue testVenue = new Venue("Asian");
+          testVenue.Save();
+
+          //Act
+          Venue foundVenue = Venue.Find(testVenue.GetId());
+
+          //Assert
+          Assert.Equal(testVenue, foundVenue);
+      }
+
+
+      [Fact]
+      public void Test_GetBands_RetrievesAllBandsInVenue()
+      {
+          //Arrange
+          Venue testVenue = new Venue("Gator Lounge");
+          testVenue.Save();
+          Band firstBand = new Band("Nirvana");
+          firstBand.Save();
+          Band secondBand = new Band("Cake");
+          secondBand.Save();
+
+          //Act
+          testVenue.AddBand(firstBand);
+          testVenue.AddBand(secondBand);
+          List<Band> testBandList = new List<Band> {firstBand, secondBand};
+          List<Band> resultBandList = testVenue.GetBands();
+
+          //Assert
+          Assert.Equal(testBandList, resultBandList);
+      }
+
+
+      [Fact]
+      public void Test_Delete_DeletesVenueAssociationsFromDatabase()
+      {
+          //Arrange
+          Band testBand = new Band("Nirvana");
+          testBand.Save();
+
+          string testName = "Gator Lounge";
+          Venue testVenue = new Venue(testName);
+          testVenue.Save();
+
+          //Act
+          testVenue.AddBand(testBand);
+          testVenue.Delete();
+
+          List<Venue> resultBandVenues = testBand.GetVenues();
+          List<Venue> testBandVenues = new List<Venue>{};
+
+          //Assert
+          Assert.Equal(testBandVenues, resultBandVenues);
+      }
+
       public void Dispose()
       {
           Venue.DeleteAll();
