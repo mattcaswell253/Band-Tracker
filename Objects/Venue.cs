@@ -38,6 +38,40 @@ namespace BandTracker
         {
             return _name;
         }
+
+        public void UpdateVenue(string NewName)
+          {
+              SqlConnection conn = DB.Connection();
+              conn.Open();
+
+              SqlCommand cmd = new SqlCommand("UPDATE venues SET name = @NewName OUTPUT INSERTED.* WHERE id = @VenueId;", conn);
+
+              cmd.Parameters.Add(new SqlParameter("@NewName", NewName));
+
+
+              SqlParameter venueIdParameter = new SqlParameter();
+              venueIdParameter.ParameterName = "@VenueId";
+              venueIdParameter.Value = this.GetId();
+              cmd.Parameters.Add(venueIdParameter);
+
+              SqlDataReader rdr = cmd.ExecuteReader();
+
+              while(rdr.Read())
+              {
+                  this._name = rdr.GetString(1);
+
+              }
+
+              if(rdr != null)
+              {
+                  rdr.Close();
+              }
+              if(conn != null)
+              {
+                  conn.Close();
+              }
+          }
+
         public static List<Venue> GetAll()
         {
             List<Venue> allVenues = new List<Venue>{};

@@ -57,7 +57,7 @@ namespace BandTracker
             model.Add("band", SelectedBand);
             model.Add("venue", VenueList);
 
-            return View["venues_of_bands.cshtml", model];
+            return View["venues_of_bands.cshtml", VenueList];
           };
 
           Get["/band/{id}"] = parameters => {
@@ -82,11 +82,13 @@ namespace BandTracker
             return View["bands_venues.cshtml", SelectedBand];
           };
 
-          Patch["/band/edit/{id}"] = parameters => {
-            Band SelectedBand = Band.Find(parameters.id);
-            SelectedBand.UpdateBand(Request.Form["band-name"]);
-            return View["success.cshtml", Band.GetAll()];
+          Patch["/venue/edit/{id}"] = parameters => {
+            Venue SelectedVenue = Venue.Find(parameters.id);
+            SelectedVenue.UpdateVenue(Request.Form["venue-name"]);
+            return View["index.cshtml", Venue.GetAll()];
           };
+
+
 
 
           Delete["/band/delete/{id}"] = parameters => {
