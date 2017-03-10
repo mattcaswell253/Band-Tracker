@@ -82,15 +82,13 @@ namespace BandTracker
             return View["bands_venues.cshtml", SelectedBand];
           };
 
-          Patch["/venue/edit/{id}"] = parameters => {
+          Patch["/venue/{id}/edit"] = parameters => {
             Venue SelectedVenue = Venue.Find(parameters.id);
             SelectedVenue.UpdateVenue(Request.Form["venue-name"]);
-            return View["index.cshtml", Venue.GetAll()];
+            return View["success.cshtml"];
           };
 
-
-
-
+      
           Delete["/band/delete/{id}"] = parameters => {
             Dictionary<string, object> model = new Dictionary<string, object>();
             Band SelectedBand = Band.Find(parameters.id);

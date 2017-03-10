@@ -44,21 +44,18 @@ namespace BandTracker
               SqlConnection conn = DB.Connection();
               conn.Open();
 
-              SqlCommand cmd = new SqlCommand("UPDATE venues SET name = @NewName OUTPUT INSERTED.* WHERE id = @VenueId;", conn);
+              SqlCommand cmd = new SqlCommand("UPDATE venues SET name = @NewName OUTPUT INSERTED.name WHERE id = @VenueId;", conn);
 
               cmd.Parameters.Add(new SqlParameter("@NewName", NewName));
 
-
-              SqlParameter venueIdParameter = new SqlParameter();
-              venueIdParameter.ParameterName = "@VenueId";
-              venueIdParameter.Value = this.GetId();
-              cmd.Parameters.Add(venueIdParameter);
+              cmd.Parameters.Add(new SqlParameter("@VenueId", this.GetId()));
 
               SqlDataReader rdr = cmd.ExecuteReader();
 
+
               while(rdr.Read())
               {
-                  this._name = rdr.GetString(1);
+                  this._name = rdr.GetString(0);
 
               }
 
